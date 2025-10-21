@@ -1,0 +1,71 @@
+require(stats)
+set.seed(464) #for reproducibility
+###################################################################################
+#Consider the price of 1 share of stock TSAEZ
+#What do we expect it to be?
+#Without any info we expect it to be a (strictly) positive number.
+#If we know today's price of 1 share of stock to be
+today=113
+#what do we expect tomorrow's price to be?
+#We expect tomorrow's price to be around 113.
+
+#If we believe the following 100 values are possible for tomorrow's price of stock
+x=rnorm(100,100,10)
+plot(x,type="p")
+#what do we expect tomorrow's price to be?
+#Answer:Take the average:
+mean(x)
+abline(h=mean(x))
+points(0,113,pch=19,cex=2,col="red")
+
+#Incidently, a summary of these values can be obtained as
+summary(x)
+
+#So 113 is one of the possible values, but it is rare. 
+#It is more likely to get values around 100.
+# A measure of how far away are the values spread around the mean is
+#given by variance
+var(x)
+#and standard deviation=square root of variance
+sd(x)
+
+#Mean, variance and standard deviation are all statistical characteristics
+#of the random variable (function) that gives possible value of stock price.
+#The best statistical characteristic is the distribution. If we know it, 
+#we can compute all the other ones: mean, variance, sd
+
+# In this case we assumed normal distribution
+#Empirical distribution
+h=hist(x,main="Empirical vs theoretical distribution",col="gray")
+par(ask=T)
+#vs theoretical distribution
+xfit=seq(min(x),max(x),length=40)
+yfit<-dnorm(xfit,mean=mean(x),sd=sd(x))
+yfit <- yfit*diff(h$mids[1:2])*length(x)
+lines(xfit, yfit, col="blue", lwd=2) 
+par(ask=T)
+abline(v=mean(x),col="green",lwd=3)
+text(70,10,"Fat tails",col="red")
+arrows(68,8,68,2,col="red")
+
+#All this was about the price tomorrow. But tomorrow is a single point in time.
+#What if we want to follow the evolution of the stock price over a year?
+#(i.e. 252 trading days). For each day we have a (closing) price that can 
+#follow a distribution (like normal). 
+
+# For each moment of time we have a random variable. We have seen the 
+# empirical distribution (coming from data) and the theoretical distribution
+# (coming from our beliefs, which are embodied in a model, like the normal 
+#distribution)
+
+#What model should we believe for the data? For sure it must be a stochastic
+#process, because that's the only think we know (time series).
+
+#Consider a plot of each stock price vs yesterday's price
+#In some cases there is a dependency, which sometimes is even linear.
+
+#Method to find the (best-fit) line equation: least squares.
+
+#So for linear dependency we can write X(t+1)=aX(t)+b and we get a (linear)
+#model that approximates the data. For this linear model we can easier study 
+#the statistical characteristics and use it for forecasting.

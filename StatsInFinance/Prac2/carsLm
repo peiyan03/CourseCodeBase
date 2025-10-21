@@ -1,0 +1,44 @@
+#list all datasets
+data()
+#load cars dataset
+data(cars)
+#brief summary giving quartiles of each of the two vectors
+summary(cars)
+#plot the data: stopping distance vs speed
+plot(cars, xlab = "Speed (mph)", ylab = "Stopping distance (ft)",las = 1)
+plot(cars$speed, cars$dist, xlab="Speed (mph)", ylab="Stopping distance (ft)")
+fit1 <- lm(dist ~ speed, data=cars)
+abline(fit1, col="red", lwd=2)
+
+
+#compute variance of the distance vector (use $ to select column of data, 
+#type cars$ and automatically all available columns will be listed)
+var(cars$dist)
+#compute mean of the data: dist
+mean(cars$dist)
+#plot a horizontal line corresponding to the mean, on top of previous plot
+abline(h=mean(cars$dist),lwd=1.5)
+# Fit a straight line, call the linear model fit1
+fit1 = lm(dist ~ speed, data = cars)
+#list values as predicted by the model
+yhat = predict.lm(fit1)
+#plot regression line on top of previous plot
+lines(cars$speed,yhat)
+#get summary of OLS fit
+summary(fit1)
+#list coefficients estimated by OLS
+fit1$coefficients
+#load residuals
+res1=fit1$residuals
+#quartiles of residuals (comment)
+summary(res1)
+#Plot residuals to check for remaining patterns
+plot(cars$speed,res1,xlab="speed",ylab="residuals",main="Residual plot")
+#plot horizontal of level 0, the desired mean of the normal
+abline(h=0)
+#QQ (quantile-quantile) plot to check for normality of residuals (otherwise some pattern remains)
+#plot for data
+qqnorm(rstandard(fit1), ylab="Standardized Residuals", xlab="Normal Scores",main="QQ plot")
+#plot for model
+qqline(rstandard(fit1))
+
